@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Counter</title>
+    <style>
+        .container {
+            text-align: center;
+        }
+        .weapon-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            justify-items: center;
+        }
+        .weapon-container {
+            margin: 10px 5px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .weapon-image {
+            width: 30px;
+            height: 30px;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+        }
+        .weapon-count {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .reset-button, .toggle-button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="total-count" style="font-size: 24px; margin-bottom: 20px;">合計: 0</div>
+    <div id="zero-count" style="font-size: 18px; margin-bottom: 10px;">残り武器数: 0</div>
+    <button class="reset-button" id="reset-button">リセット</button>
+    <button class="toggle-button" id="toggle-button">増加</button>
+    <div id="weapon-container" class="weapon-grid">
+       <div title="スプラシューター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="1" id="weapon-image-1" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=4d70126a9b68e76b463e182d3d42218d&t=20220905214644');"></div>
+    <div class="weapon-count" id="weapon-count-1">0</div>
+</div>
+
+
+<div title="ヒーローシューター レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="2" id="weapon-image-2" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%92%E3%83%BC%E3%83%AD%E3%83%BC%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=b628311e71f3e1abf8b034a0bddc88fa&t=20220928171612');"></div>
+    <div class="weapon-count" id="weapon-count-2">0</div>
+</div>
+
+
+<div title="スプラシューターコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="3" id="weapon-image-3" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=3fafb8f048b3ba93dfdcb419b46c3a40&t=20221201132149');"></div>
+    <div class="weapon-count" id="weapon-count-3">0</div>
+</div>
+
+
+<div title="オーダーシューター レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="4" id="weapon-image-4" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=27cbe774af83e56e09c068716d644b27&t=20240225185911');"></div>
+    <div class="weapon-count" id="weapon-count-4">0</div>
+</div>
+
+
+<div title="オクタシューター レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="5" id="weapon-image-5" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%82%AF%E3%82%BF%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=d903e4e26b20c26beca90c3cc3e59e2a&t=20240225185953');"></div>
+    <div class="weapon-count" id="weapon-count-5">0</div>
+</div>
+
+
+<div title=".96ガロン" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="6" id="weapon-image-6" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/.96%E3%82%AC%E3%83%AD%E3%83%B3.png?rev=064da5391cf8591ffe192d7e74f644c5&t=20220905214558');"></div>
+    <div class="weapon-count" id="weapon-count-6">0</div>
+</div>
+
+
+<div title=".96ガロンデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="7" id="weapon-image-7" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/.96%E3%82%AC%E3%83%AD%E3%83%B3%E3%83%87%E3%82%B3.png.webp?rev=b6c4aab6a8e82d7287502b1eaffd0ff1&t=20230302125854');"></div>
+    <div class="weapon-count" id="weapon-count-7">0</div>
+</div>
+
+
+<div title="シャープマーカー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="8" id="weapon-image-8" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B7%E3%83%A3%E3%83%BC%E3%83%97%E3%83%9E%E3%83%BC%E3%82%AB%E3%83%BC.png?rev=1f53326ed2f779537426c3ce02a55134&t=20230627135402');"></div>
+    <div class="weapon-count" id="weapon-count-8">0</div>
+</div>
+
+
+<div title="シャープマーカーネオ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="9" id="weapon-image-9" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B7%E3%83%A3%E3%83%BC%E3%83%97%E3%83%9E%E3%83%BC%E3%82%AB%E3%83%BC%E3%83%8D%E3%82%AA.png.webp?rev=3a4faa185f912df1b57c6b6594681f01&t=20230302125907');"></div>
+    <div class="weapon-count" id="weapon-count-9">0</div>
+</div>
+
+
+<div title="わかばシューター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="10" id="weapon-image-10" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%8F%E3%81%8B%E3%81%B0%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=71c835cfbea476bbea062d8b083a62c6&t=20220905214729');"></div>
+    <div class="weapon-count" id="weapon-count-10">0</div>
+</div>
+
+
+<div title="もみじシューター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="11" id="weapon-image-11" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%82%E3%81%BF%E3%81%98%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=0c0acb961667730f7fd53b3d8c2985ed&t=20221201132202');"></div>
+    <div class="weapon-count" id="weapon-count-11">0</div>
+</div>
+
+
+<div title=".52ガロン" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="12" id="weapon-image-12" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/.52%E3%82%AC%E3%83%AD%E3%83%B3.png?rev=18c6eaed972b85a7ed9a01503afd8aff&t=20220905214540');"></div>
+    <div class="weapon-count" id="weapon-count-12">0</div>
+</div>
+
+
+<div title=".52ガロンデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="13" id="weapon-image-13" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/.52%E3%82%AC%E3%83%AD%E3%83%B3%E3%83%87%E3%82%B3.png.webp?rev=37f9ebb3a5757d9bfa9c24e1d6b36cec&t=20240302124637');"></div>
+    <div class="weapon-count" id="weapon-count-13">0</div>
+</div>
+
+
+<div title="H3リールガン" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="14" id="weapon-image-14" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/H3%E3%83%AA%E3%83%BC%E3%83%AB%E3%82%AC%E3%83%B3.png?rev=fc08cf7b11fc72433c85efd244561bf6&t=20220905214605');"></div>
+    <div class="weapon-count" id="weapon-count-14">0</div>
+</div>
+
+
+<div title="H3リールガンD" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="15" id="weapon-image-15" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/H3%E3%83%AA%E3%83%BC%E3%83%AB%E3%82%AC%E3%83%B3D.png?rev=420b56e400b3c4371f7b3520d7d1c155&t=20230602152717');"></div>
+    <div class="weapon-count" id="weapon-count-15">0</div>
+</div>
+
+
+<div title="L3リールガン" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="16" id="weapon-image-16" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/L3%E3%83%AA%E3%83%BC%E3%83%AB%E3%82%AC%E3%83%B3.png?rev=db5d9c167521f57ae951636b4e0c56e1&t=20220905214609');"></div>
+    <div class="weapon-count" id="weapon-count-16">0</div>
+</div>
+
+
+<div title="L3リールガンD" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="17" id="weapon-image-17" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/L3%E3%83%AA%E3%83%BC%E3%83%AB%E3%82%AC%E3%83%B3D.png.webp?rev=e5fc0818cf6d0244c40fc1ce6c73a163&t=20230302125857');"></div>
+    <div class="weapon-count" id="weapon-count-17">0</div>
+</div>
+
+
+<div title="N-ZAP85" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="18" id="weapon-image-18" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/N-ZAP85.png?rev=1dc33e3c88bda7c5644ced653ea31886&t=20220905214615');"></div>
+    <div class="weapon-count" id="weapon-count-18">0</div>
+</div>
+
+
+<div title="N-ZAP89" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="19" id="weapon-image-19" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/N-ZAP89.png?rev=a97666fcaa1d13d5a06aee055b56c4f1&t=20230302125900');"></div>
+    <div class="weapon-count" id="weapon-count-19">0</div>
+</div>
+
+
+<div title="ジェットスイーパー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="20" id="weapon-image-20" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B8%E3%82%A7%E3%83%83%E3%83%88%E3%82%B9%E3%82%A4%E3%83%BC%E3%83%91%E3%83%BC.png?rev=859c320f86fd727ddbec3f1526388c2a&t=20220905214623');"></div>
+    <div class="weapon-count" id="weapon-count-20">0</div>
+</div>
+
+
+<div title="ジェットスイーパーカスタム" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="21" id="weapon-image-21" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B8%E3%82%A7%E3%83%83%E3%83%88%E3%82%B9%E3%82%A4%E3%83%BC%E3%83%91%E3%83%BC%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0.png.webp?rev=2ee87302564e6d50a7e21701d609b811&t=20230302125903');"></div>
+    <div class="weapon-count" id="weapon-count-21">0</div>
+</div>
+
+
+<div title="プライムシューター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="22" id="weapon-image-22" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%97%E3%83%A9%E3%82%A4%E3%83%A0%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=7250edc0e3c7e4bb6432d25f1b83711b&t=20220905214655');"></div>
+    <div class="weapon-count" id="weapon-count-22">0</div>
+</div>
+
+
+<div title="プライムシューターコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="23" id="weapon-image-23" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%97%E3%83%A9%E3%82%A4%E3%83%A0%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=b03e7bdf875beb9ee707892a58313282&t=20221201132143');"></div>
+    <div class="weapon-count" id="weapon-count-23">0</div>
+</div>
+
+
+<div title="プロモデラーMG" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="24" id="weapon-image-24" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%97%E3%83%AD%E3%83%A2%E3%83%87%E3%83%A9%E3%83%BCMG.png?rev=ffd5754f538379f7283b678366cb4b96&t=20220905214705');"></div>
+    <div class="weapon-count" id="weapon-count-24">0</div>
+</div>
+
+
+<div title="プロモデラーRG" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="25" id="weapon-image-25" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%97%E3%83%AD%E3%83%A2%E3%83%87%E3%83%A9%E3%83%BCRG.png?rev=52a9ab39fef57e834fc3b0b136a4c0d3&t=20221201132155');"></div>
+    <div class="weapon-count" id="weapon-count-25">0</div>
+</div>
+
+
+<div title="ボールドマーカー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="26" id="weapon-image-26" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%9C%E3%83%BC%E3%83%AB%E3%83%89%E3%83%9E%E3%83%BC%E3%82%AB%E3%83%BC.png?rev=6e3c4434ece589bd5cb6e7cad05cc8d5&t=20230627135358');"></div>
+    <div class="weapon-count" id="weapon-count-26">0</div>
+</div>
+
+
+<div title="ボールドマーカーネオ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="27" id="weapon-image-27" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%9C%E3%83%BC%E3%83%AB%E3%83%89%E3%83%9E%E3%83%BC%E3%82%AB%E3%83%BC%E3%83%8D%E3%82%AA.png.webp?rev=efb671b0b1ca125e807de2173033d94c&t=20230302125913');"></div>
+    <div class="weapon-count" id="weapon-count-27">0</div>
+</div>
+
+
+<div title="ボトルガイザー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="28" id="weapon-image-28" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%9C%E3%83%88%E3%83%AB%E3%82%AC%E3%82%A4%E3%82%B6%E3%83%BC.png?rev=edbc84198a4a2d44dc0648462083f058&t=20220905214719');"></div>
+    <div class="weapon-count" id="weapon-count-28">0</div>
+</div>
+
+
+<div title="ボトルガイザーフォイル" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="29" id="weapon-image-29" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%9C%E3%83%88%E3%83%AB%E3%82%AC%E3%82%A4%E3%82%B6%E3%83%BC%E3%83%95%E3%82%A9%E3%82%A4%E3%83%AB.png?rev=95b4a9a4a940896183b222272a21cfcf&t=20231201184133');"></div>
+    <div class="weapon-count" id="weapon-count-29">0</div>
+</div>
+
+
+<div title="スペースシューター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="30" id="weapon-image-30" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=72407d7eeb73003b9c450c614e8f34c4&t=20221201093754');"></div>
+    <div class="weapon-count" id="weapon-count-30">0</div>
+</div>
+
+
+<div title="スペースシューターコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="31" id="weapon-image-31" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=53fe1490df92afc52a45a04966b4a3fb&t=20230602152710');"></div>
+    <div class="weapon-count" id="weapon-count-31">0</div>
+</div>
+
+
+<div title="ロングブラスター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="32" id="weapon-image-32" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%AD%E3%83%B3%E3%82%B0%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC.png?rev=0c6a2b501b46cbcf8a2b5c5d78349793&t=20220906104642');"></div>
+    <div class="weapon-count" id="weapon-count-32">0</div>
+</div>
+
+
+<div title="ホットブラスター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="33" id="weapon-image-33" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%9B%E3%83%83%E3%83%88%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC.png?rev=b3bb1bd6dccefa222fe7e5c900771c08&t=20220906104633');"></div>
+    <div class="weapon-count" id="weapon-count-33">0</div>
+</div>
+
+
+<div title="ホットブラスターカスタム" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="34" id="weapon-image-34" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%9B%E3%83%83%E3%83%88%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0.png?rev=669babb43acc48ab85f9e2c27ced35dd&t=20231201184115');"></div>
+    <div class="weapon-count" id="weapon-count-34">0</div>
+</div>
+
+
+<div title="クラッシュブラスター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="35" id="weapon-image-35" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC.png?rev=1a0a11ec5a618ee936b01b62ed1a17da&t=20220906104732');"></div>
+    <div class="weapon-count" id="weapon-count-35">0</div>
+</div>
+
+
+<div title="クラッシュブラスターネオ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="36" id="weapon-image-36" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AF%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%8D%E3%82%AA.png.webp?rev=24e5c0c2fc924b96f785d22e9abfaa3d&t=20230302125942');"></div>
+    <div class="weapon-count" id="weapon-count-36">0</div>
+</div>
+
+
+<div title="Rブラスターエリート" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="37" id="weapon-image-37" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/R%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%A8%E3%83%AA%E3%83%BC%E3%83%88.png?rev=fcce0157a057946bd3cffed1dc249664&t=20230918121455');"></div>
+    <div class="weapon-count" id="weapon-count-37">0</div>
+</div>
+
+
+<div title="Rブラスターエリートデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="38" id="weapon-image-38" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/R%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%82%A8%E3%83%AA%E3%83%BC%E3%83%88%E3%83%87%E3%82%B3.png?rev=d7654b2425469ad147e8cf0825141832&t=20230602152504');"></div>
+    <div class="weapon-count" id="weapon-count-38">0</div>
+</div>
+
+
+<div title="ノヴァブラスター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="39" id="weapon-image-39" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%8E%E3%83%B4%E3%82%A1%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC.png?rev=903f8c162cfbf6fbb2b194759c8bfc7c&t=20220906104611');"></div>
+    <div class="weapon-count" id="weapon-count-39">0</div>
+</div>
+
+
+<div title="ノヴァブラスターネオ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="40" id="weapon-image-40" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%8E%E3%83%B4%E3%82%A1%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%8D%E3%82%AA.png?rev=a737d550aca0c98ea97d8fb8a3486c17&t=20221201132017');"></div>
+    <div class="weapon-count" id="weapon-count-40">0</div>
+</div>
+
+
+<div title="オーダーブラスター レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="41" id="weapon-image-41" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=3a167091e011cdbeb158ffabc135ff67&t=20240225185938');"></div>
+    <div class="weapon-count" id="weapon-count-41">0</div>
+</div>
+
+
+<div title="ラピッドブラスター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="42" id="weapon-image-42" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%A9%E3%83%94%E3%83%83%E3%83%89%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC.png?rev=b6c1d6630bd7b0eb09fdce30b06c04d1&t=20230918121459');"></div>
+    <div class="weapon-count" id="weapon-count-42">0</div>
+</div>
+
+
+<div title="ラピッドブラスターデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="43" id="weapon-image-43" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%A9%E3%83%94%E3%83%83%E3%83%89%E3%83%96%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%87%E3%82%B3.png.webp?rev=4731b70482b93f128f8db3daf0a03d83&t=20230302125939');"></div>
+    <div class="weapon-count" id="weapon-count-43">0</div>
+</div>
+
+
+<div title="S-BLAST92" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="44" id="weapon-image-44" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/S-BLAST92.png?rev=98a3cd103faa65c7307b0d11d5ed9584&t=20230602152512');"></div>
+    <div class="weapon-count" id="weapon-count-44">0</div>
+</div>
+
+
+<div title="S-BLAST91" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="45" id="weapon-image-45" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/S-BLAST91.png?rev=0b0ac629663fe94e7e1d6af1011daf00&t=20231201184108');"></div>
+    <div class="weapon-count" id="weapon-count-45">0</div>
+</div>
+
+
+<div title="ダイナモローラー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="46" id="weapon-image-46" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%80%E3%82%A4%E3%83%8A%E3%83%A2%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC.png?rev=4caedd3918f8834252a601f42b95f43a&t=20220905220149');"></div>
+    <div class="weapon-count" id="weapon-count-46">0</div>
+</div>
+
+
+<div title="ダイナモローラーテスラ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="47" id="weapon-image-47" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%80%E3%82%A4%E3%83%8A%E3%83%A2%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%83%86%E3%82%B9%E3%83%A9.png?rev=7c719f303d4708aa0057792fcc96ac63&t=20230902112645');"></div>
+    <div class="weapon-count" id="weapon-count-47">0</div>
+</div>
+
+
+<div title="スプラローラー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="48" id="weapon-image-48" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC.png?rev=35e16e1b1929197aacb3b358faca81da&t=20220905220143');"></div>
+    <div class="weapon-count" id="weapon-count-48">0</div>
+</div>
+
+
+<div title="スプラローラーコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="49" id="weapon-image-49" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png.webp?rev=2dff7a360ee748cd50c370b68bcc957b&t=20230302125949');"></div>
+    <div class="weapon-count" id="weapon-count-49">0</div>
+</div>
+
+
+<div title="オーダーローラー レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="50" id="weapon-image-50" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=ef21ab1782dac8fea22e64592ea901aa&t=20240225185946');"></div>
+    <div class="weapon-count" id="weapon-count-50">0</div>
+</div>
+
+
+<div title="ヴァリアブルローラー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="51" id="weapon-image-51" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%B4%E3%82%A1%E3%83%AA%E3%82%A2%E3%83%96%E3%83%AB%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC.png?rev=ca05919a5b43e3f8795a2be2eb28bbfc&t=20220905220053');"></div>
+    <div class="weapon-count" id="weapon-count-51">0</div>
+</div>
+
+
+<div title="ヴァリアブルローラーフォイル" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="52" id="weapon-image-52" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%B4%E3%82%A1%E3%83%AA%E3%82%A2%E3%83%96%E3%83%AB%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%83%95%E3%82%A9%E3%82%A4%E3%83%AB.png.webp?rev=951f8951ccf0b5d273a3621a2b16e5c0&t=20240302124647');"></div>
+    <div class="weapon-count" id="weapon-count-52">0</div>
+</div>
+
+
+<div title="カーボンローラー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="53" id="weapon-image-53" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AB%E3%83%BC%E3%83%9C%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC.png?rev=2d3ede75f6260c236cbdeca7d4f8b50d&t=20220905220112');"></div>
+    <div class="weapon-count" id="weapon-count-53">0</div>
+</div>
+
+
+<div title="カーボンローラーデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="54" id="weapon-image-54" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AB%E3%83%BC%E3%83%9C%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%83%87%E3%82%B3.png?rev=71d30defd6e332e19775fb1bd913c0b0&t=20221201132135');"></div>
+    <div class="weapon-count" id="weapon-count-54">0</div>
+</div>
+
+
+<div title="ワイドローラー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="55" id="weapon-image-55" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%AF%E3%82%A4%E3%83%89%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC.png?rev=92ad01bb0d912e69be0ebe69586fb8bf&t=20221201093807');"></div>
+    <div class="weapon-count" id="weapon-count-55">0</div>
+</div>
+
+
+<div title="ワイドローラーコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="56" id="weapon-image-56" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%AF%E3%82%A4%E3%83%89%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=67ef5e2a3e9fc34a223ded8b22a148e4&t=20230602152638');"></div>
+    <div class="weapon-count" id="weapon-count-56">0</div>
+</div>
+
+
+<div title="パブロ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="57" id="weapon-image-57" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%91%E3%83%96%E3%83%AD.png?rev=693c3a8ddd528cb106340d2430d4ef42&t=20220906104619');"></div>
+    <div class="weapon-count" id="weapon-count-57">0</div>
+</div>
+
+
+<div title="パブロ・ヒュー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="58" id="weapon-image-58" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%91%E3%83%96%E3%83%AD%E3%83%BB%E3%83%92%E3%83%A5%E3%83%BC.png?rev=0ebb23420e26b0ac4580ca0ad5344329&t=20221201132113');"></div>
+    <div class="weapon-count" id="weapon-count-58">0</div>
+</div>
+
+
+<div title="ホクサイ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="59" id="weapon-image-59" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%9B%E3%82%AF%E3%82%B5%E3%82%A4.png?rev=4caeadaa7f73c847a1126a2880aefaa2&t=20220906104629');"></div>
+    <div class="weapon-count" id="weapon-count-59">0</div>
+</div>
+
+
+<div title="ホクサイ・ヒュー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="60" id="weapon-image-60" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%9B%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%BB%E3%83%92%E3%83%A5%E3%83%BC.png?rev=9c5a6d8394ae9d57ec5fb5ca6959a4af&t=20230902112630');"></div>
+    <div class="weapon-count" id="weapon-count-60">0</div>
+</div>
+
+
+<div title="オーダーブラシ レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="61" id="weapon-image-61" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%83%96%E3%83%A9%E3%82%B7%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=f2ed7cd3b398515537dfbb7f8726fad6&t=20240225185932');"></div>
+    <div class="weapon-count" id="weapon-count-61">0</div>
+</div>
+
+
+<div title="フィンセント" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="62" id="weapon-image-62" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%95%E3%82%A3%E3%83%B3%E3%82%BB%E3%83%B3%E3%83%88.png?rev=4b603cb2dce31f5c0d8929f2dfedeb1b&t=20230602152520');"></div>
+    <div class="weapon-count" id="weapon-count-62">0</div>
+</div>
+
+
+<div title="フィンセント・ヒュー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="63" id="weapon-image-63" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%95%E3%82%A3%E3%83%B3%E3%82%BB%E3%83%B3%E3%83%88%E3%83%BB%E3%83%92%E3%83%A5%E3%83%BC.png?rev=d0ecf7bf23bc3d1930ce96ffd26d50d0&t=20231201184105');"></div>
+    <div class="weapon-count" id="weapon-count-63">0</div>
+</div>
+
+
+<div title="リッター4K" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="64" id="weapon-image-64" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%AA%E3%83%83%E3%82%BF%E3%83%BC4K.png?rev=4a0657ab4f525dfc5b33cd1bb2ce976a&t=20220906111947');"></div>
+    <div class="weapon-count" id="weapon-count-64">0</div>
+</div>
+
+
+<div title="リッター4Kカスタム" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="65" id="weapon-image-65" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%AA%E3%83%83%E3%82%BF%E3%83%BC4K%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0.png?rev=8cfd55ecbb1ca51b54fe005f718cacfc&t=20240302124718');"></div>
+    <div class="weapon-count" id="weapon-count-65">0</div>
+</div>
+
+
+<div title="4Kスコープ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="77" id="weapon-image-77" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/4K%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97.png?rev=60d2be19cb6182bfb2deee73f171a8c4&t=20220905220059');"></div>
+    <div class="weapon-count" id="weapon-count-77">0</div>
+</div>
+
+
+<div title="4Kスコープカスタム" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="66" id="weapon-image-66" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%AA%E3%83%83%E3%82%BF%E3%83%BC4K%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0.png?rev=8cfd55ecbb1ca51b54fe005f718cacfc&t=20240302124718');"></div>
+    <div class="weapon-count" id="weapon-count-66">0</div>
+</div>
+
+
+<div title="スプラチャージャー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="67" id="weapon-image-67" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%83%81%E3%83%A3%E3%83%BC%E3%82%B8%E3%83%A3%E3%83%BC.png?rev=cedd669f551f86440a8bd380540044a6&t=20220905220137');"></div>
+    <div class="weapon-count" id="weapon-count-67">0</div>
+</div>
+
+
+<div title="スプラチャージャーコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="68" id="weapon-image-68" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%83%81%E3%83%A3%E3%83%BC%E3%82%B8%E3%83%A3%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=8a65375949283646efae3fec995edfce&t=20230331190628');"></div>
+    <div class="weapon-count" id="weapon-count-68">0</div>
+</div>
+
+
+<div title="オーダーチャージャー レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="69" id="weapon-image-69" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%83%81%E3%83%A3%E3%83%BC%E3%82%B8%E3%83%A3%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=40bb1ca6e3cab8a096bc278d22e91feb&t=20240225185926');"></div>
+    <div class="weapon-count" id="weapon-count-69">0</div>
+</div>
+
+
+<div title="14式竹筒銃・甲" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="70" id="weapon-image-70" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/14%E5%BC%8F%E7%AB%B9%E7%AD%92%E9%8A%83%E3%83%BB%E7%94%B2.png?rev=b413ea93f22227adc5bfc11c5c014212&t=20220905220105');"></div>
+    <div class="weapon-count" id="weapon-count-70">0</div>
+</div>
+
+
+<div title="スクイックリンα" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="71" id="weapon-image-71" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%82%AF%E3%82%A4%E3%83%83%E3%82%AF%E3%83%AA%E3%83%B3%CE%B1.png?rev=615c1848d4f7049c08ece6b1d11dfc6e&t=20220905220120');"></div>
+    <div class="weapon-count" id="weapon-count-71">0</div>
+</div>
+
+
+<div title="スクイックリンβ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="72" id="weapon-image-72" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%82%AF%E3%82%A4%E3%83%83%E3%82%AF%E3%83%AA%E3%83%B3%CE%B2.png?rev=5cb43f51c077523663a0833e4fa0e53f&t=20240302124709');"></div>
+    <div class="weapon-count" id="weapon-count-72">0</div>
+</div>
+
+
+<div title="ソイチューバー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="73" id="weapon-image-73" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%BD%E3%82%A4%E3%83%81%E3%83%A5%E3%83%BC%E3%83%90%E3%83%BC.png?rev=d3cc8b41a12db0aad13ccceef78290c1&t=20220905220218');"></div>
+    <div class="weapon-count" id="weapon-count-73">0</div>
+</div>
+
+
+<div title="ソイチューバーカスタム" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="74" id="weapon-image-74" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%BD%E3%82%A4%E3%83%81%E3%83%A5%E3%83%BC%E3%83%90%E3%83%BC%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0.png?rev=9514f172b857c2329b37afbe77f2d42f&t=20230902112624');"></div>
+    <div class="weapon-count" id="weapon-count-74">0</div>
+</div>
+
+
+<div title="スプラスコープ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="75" id="weapon-image-75" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97.png?rev=810d81a1e713188d9f1fa5b31ef42ece&t=20220905220132');"></div>
+    <div class="weapon-count" id="weapon-count-75">0</div>
+</div>
+
+
+<div title="スプラスコープコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="76" id="weapon-image-76" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=ceeac9311ca6241afe0577c7c06074ac&t=20230302125929');"></div>
+    <div class="weapon-count" id="weapon-count-76">0</div>
+</div>
+
+
+
+<div title="R-PEN/5H" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="78" id="weapon-image-78" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/R-PEN%EF%BC%8F5H.png?rev=caf96679d5ab5dc7cc717f886d4e0380&t=20221201094005');"></div>
+    <div class="weapon-count" id="weapon-count-78">0</div>
+</div>
+
+
+<div title="R-PEN/5B" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="79" id="weapon-image-79" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/R-PEN%EF%BC%8F5B.png?rev=9721a1e844c593d6aefd7a1cf6916e8a&t=20231201184129');"></div>
+    <div class="weapon-count" id="weapon-count-79">0</div>
+</div>
+
+
+<div title="スクリュースロッシャー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="80" id="weapon-image-80" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%A5%E3%83%BC%E3%82%B9%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC.png?rev=5db66c3f1fdca3b8fde652de4a08af46&t=20220906103807');"></div>
+    <div class="weapon-count" id="weapon-count-80">0</div>
+</div>
+
+
+<div title="スクリュースロッシャーネオ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="81" id="weapon-image-81" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%A5%E3%83%BC%E3%82%B9%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC%E3%83%8D%E3%82%AA.png?rev=998b77fa8e9b5f08126b0a351be5ba44&t=20230902112617');"></div>
+    <div class="weapon-count" id="weapon-count-81">0</div>
+</div>
+
+
+<div title="エクスプロッシャー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="82" id="weapon-image-82" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%A8%E3%82%AF%E3%82%B9%E3%83%97%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC.png?rev=581571f8d0ed8584aeb4abff65482137&t=20220906103732');"></div>
+    <div class="weapon-count" id="weapon-count-82">0</div>
+</div>
+
+
+<div title="エクスプロッシャーカスタム" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="83" id="weapon-image-83" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%A8%E3%82%AF%E3%82%B9%E3%83%97%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0.png.webp?rev=3b81314df4f57eb4de7dde20c9a7937e&t=20240302124700');"></div>
+    <div class="weapon-count" id="weapon-count-83">0</div>
+</div>
+
+
+<div title="オーバーフロッシャー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="84" id="weapon-image-84" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%95%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC.png?rev=afe5a9cc21242502cfc0347951e61fe4&t=20220906103738');"></div>
+    <div class="weapon-count" id="weapon-count-84">0</div>
+</div>
+
+
+<div title="オーバーフロッシャーデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="85" id="weapon-image-85" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%95%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC%E3%83%87%E3%82%B3.png?rev=8ae6643a37c077304f58aea9d91d22d5&t=20230902112609');"></div>
+    <div class="weapon-count" id="weapon-count-85">0</div>
+</div>
+
+
+<div title="バケットスロッシャー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="86" id="weapon-image-86" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%90%E3%82%B1%E3%83%83%E3%83%88%E3%82%B9%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC.png?rev=a584176d80465fdf6e5790982da674ec&t=20220906103852');"></div>
+    <div class="weapon-count" id="weapon-count-86">0</div>
+</div>
+
+
+<div title="バケットスロッシャーデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="87" id="weapon-image-87" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%90%E3%82%B1%E3%83%83%E3%83%88%E3%82%B9%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC%E3%83%87%E3%82%B3.png?rev=127def426f32211134eb30bba9425269&t=20221201132130');"></div>
+    <div class="weapon-count" id="weapon-count-87">0</div>
+</div>
+
+
+<div title="オーダースロッシャー レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="88" id="weapon-image-88" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%B9%E3%83%AD%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=c5a3b123090177e7eb9ba6c74aa9449a&t=20240225185921');"></div>
+    <div class="weapon-count" id="weapon-count-88">0</div>
+</div>
+
+
+<div title="ヒッセン" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="89" id="weapon-image-89" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%92%E3%83%83%E3%82%BB%E3%83%B3.png?rev=a5e9a5352ff6f8785117db986a0eecc7&t=20220906103905');"></div>
+    <div class="weapon-count" id="weapon-count-89">0</div>
+</div>
+
+
+<div title="ヒッセン・ヒュー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="90" id="weapon-image-90" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%92%E3%83%83%E3%82%BB%E3%83%B3%E3%83%BB%E3%83%92%E3%83%A5%E3%83%BC.png?rev=3536bd56dd92d5e19e889fb2737188b2&t=20230302125923');"></div>
+    <div class="weapon-count" id="weapon-count-90">0</div>
+</div>
+
+
+<div title="モップリン" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="91" id="weapon-image-91" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%A2%E3%83%83%E3%83%97%E3%83%AA%E3%83%B3.png?rev=ead8a9e0a5bc61a925ffec4ac382334a&t=20230902112614');"></div>
+    <div class="weapon-count" id="weapon-count-91">0</div>
+</div>
+
+
+<div title="モップリンD" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="92" id="weapon-image-92" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%A2%E3%83%83%E3%83%97%E3%83%AA%E3%83%B3D.png.webp?rev=af08b9df29de950614cf14f741411b8b&t=20240302124715');"></div>
+    <div class="weapon-count" id="weapon-count-92">0</div>
+</div>
+
+
+<div title="ハイドラント" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="93" id="weapon-image-93" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%8F%E3%82%A4%E3%83%89%E3%83%A9%E3%83%B3%E3%83%88.png?rev=ab6a736dc2e4c56fcda0cb2ec6bd1d5e&t=20220906103846');"></div>
+    <div class="weapon-count" id="weapon-count-93">0</div>
+</div>
+
+
+<div title="クーゲルシュライバー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="94" id="weapon-image-94" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AF%E3%83%BC%E3%82%B2%E3%83%AB%E3%82%B7%E3%83%A5%E3%83%A9%E3%82%A4%E3%83%90%E3%83%BC.png?rev=e256f3e325fe520d1b10093d33dc53df&t=20220906103755');"></div>
+    <div class="weapon-count" id="weapon-count-94">0</div>
+</div>
+
+
+<div title="クーゲルシュライバー・ヒュー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="95" id="weapon-image-95" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AF%E3%83%BC%E3%82%B2%E3%83%AB%E3%82%B7%E3%83%A5%E3%83%A9%E3%82%A4%E3%83%90%E3%83%BC%E3%83%BB%E3%83%92%E3%83%A5%E3%83%BC.png?rev=9c33be3409ae00baac77f3be2b0688c1&t=20230902112602');"></div>
+    <div class="weapon-count" id="weapon-count-95">0</div>
+</div>
+
+
+<div title="スプラスピナー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="96" id="weapon-image-96" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AF%E3%83%BC%E3%82%B2%E3%83%AB%E3%82%B7%E3%83%A5%E3%83%A9%E3%82%A4%E3%83%90%E3%83%BC%E3%83%BB%E3%83%92%E3%83%A5%E3%83%BC.png?rev=9c33be3409ae00baac77f3be2b0688c1&t=20230902112602');"></div>
+    <div class="weapon-count" id="weapon-count-96">0</div>
+</div>
+
+
+<div title="スプラスピナーコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="97" id="weapon-image-97" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B9%E3%83%94%E3%83%8A%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=60ca317883bb029154747ab28dcb5e9f&t=20221201132125');"></div>
+    <div class="weapon-count" id="weapon-count-97">0</div>
+</div>
+
+
+<div title="ノーチラス47" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="98" id="weapon-image-98" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%8E%E3%83%BC%E3%83%81%E3%83%A9%E3%82%B947.png?rev=ac1b50a2695c156f0b34ce72050f6a5a&t=20220906103841');"></div>
+    <div class="weapon-count" id="weapon-count-98">0</div>
+</div>
+
+
+<div title="ノーチラス79" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="99" id="weapon-image-99" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%8E%E3%83%BC%E3%83%81%E3%83%A9%E3%82%B979.png.webp?rev=195a961c6975ef160597f170fcab917b&t=20240302124713');"></div>
+    <div class="weapon-count" id="weapon-count-99">0</div>
+</div>
+
+
+<div title="バレルスピナー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="100" id="weapon-image-100" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%90%E3%83%AC%E3%83%AB%E3%82%B9%E3%83%94%E3%83%8A%E3%83%BC.png?rev=65b52dcb9159bfc35c2d107b12b8da64&t=20220906103859');"></div>
+    <div class="weapon-count" id="weapon-count-100">0</div>
+</div>
+
+
+<div title="バレルスピナーデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="101" id="weapon-image-101" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%90%E3%83%AC%E3%83%AB%E3%82%B9%E3%83%94%E3%83%8A%E3%83%BC%E3%83%87%E3%82%B3.png?rev=8dd6579c20c92d87ab42491279cbcd43&t=20230602152724');"></div>
+    <div class="weapon-count" id="weapon-count-101">0</div>
+</div>
+
+
+<div title="オーダースピナー レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="102" id="weapon-image-102" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%B9%E3%83%94%E3%83%8A%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=a24e538e86fa6f4c85c1203023114a42&t=20240225185918');"></div>
+    <div class="weapon-count" id="weapon-count-102">0</div>
+</div>
+
+
+<div title="イグザミナー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="103" id="weapon-image-103" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%A4%E3%82%B0%E3%82%B6%E3%83%9F%E3%83%8A%E3%83%BC.png?rev=ece8f62ace7229a26fac66755ea7b2aa&t=20230902112810');"></div>
+    <div class="weapon-count" id="weapon-count-103">0</div>
+</div>
+
+
+<div title="ケルビン525" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="104" id="weapon-image-104" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B1%E3%83%AB%E3%83%93%E3%83%B3525.png?rev=d3ba307e5af6a60aafe3cbdf5668c8a7&t=20220906103800');"></div>
+    <div class="weapon-count" id="weapon-count-104">0</div>
+</div>
+
+
+<div title="ケルビン525デコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="105" id="weapon-image-105" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B1%E3%83%AB%E3%83%93%E3%83%B3525%E3%83%87%E3%82%B3.png.webp?rev=f22b88e4d7c244dea017ca107b4540e7&t=20240302124706');"></div>
+    <div class="weapon-count" id="weapon-count-105">0</div>
+</div>
+
+
+<div title="クアッドホッパーブラック" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="106" id="weapon-image-106" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AF%E3%82%A2%E3%83%83%E3%83%89%E3%83%9B%E3%83%83%E3%83%91%E3%83%BC%E3%83%96%E3%83%A9%E3%83%83%E3%82%AF.png?rev=de6749c30cf1e625e20619fe3fc60aed&t=20220906103748');"></div>
+    <div class="weapon-count" id="weapon-count-106">0</div>
+</div>
+
+
+<div title="クアッドホッパーホワイト" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="107" id="weapon-image-107" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AF%E3%82%A2%E3%83%83%E3%83%89%E3%83%9B%E3%83%83%E3%83%91%E3%83%BC%E3%83%9B%E3%83%AF%E3%82%A4%E3%83%88.png?rev=5c2a347338a92b2a4a3e9dd705fcb600&t=20230602152606');"></div>
+    <div class="weapon-count" id="weapon-count-107">0</div>
+</div>
+
+
+<div title="スパッタリー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="108" id="weapon-image-108" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%91%E3%83%83%E3%82%BF%E3%83%AA%E3%83%BC.png?rev=9c1e988714c460deb369e6c5dad974cc&t=20220906103812');"></div>
+    <div class="weapon-count" id="weapon-count-108">0</div>
+</div>
+
+
+<div title="スパッタリー・ヒュー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="109" id="weapon-image-109" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%91%E3%83%83%E3%82%BF%E3%83%AA%E3%83%BC%E3%83%BB%E3%83%92%E3%83%A5%E3%83%BC.png?rev=da27396984f3b1ae0b537df69064f732&t=20221201132119');"></div>
+    <div class="weapon-count" id="weapon-count-109">0</div>
+</div>
+
+
+<div title="スプラマニューバー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="110" id="weapon-image-110" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%83%9E%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%90%E3%83%BC.png?rev=be5d57005fd92c7aaae40b61da015b9d&t=20220906103827');"></div>
+    <div class="weapon-count" id="weapon-count-110">0</div>
+</div>
+
+
+<div title="スプラマニューバーコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="111" id="weapon-image-111" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%83%9E%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%90%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=9d8f79f56328b6868a1205bd22318462&t=20231201184124');"></div>
+    <div class="weapon-count" id="weapon-count-111">0</div>
+</div>
+
+
+<div title="オーダーマニューバー レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="112" id="weapon-image-112" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%83%9E%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%90%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png.webp?rev=3bbcbc9ccdd886ca685e0d03fe937fbd&t=20240225185942');"></div>
+    <div class="weapon-count" id="weapon-count-112">0</div>
+</div>
+
+
+<div title="デュアルスイーパー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="113" id="weapon-image-113" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%82%B9%E3%82%A4%E3%83%BC%E3%83%91%E3%83%BC.png?rev=20b850827dcfff36a7eb059b742ff117&t=20220906103833');"></div>
+    <div class="weapon-count" id="weapon-count-113">0</div>
+</div>
+
+
+<div title="デュアルスイーパーカスタム" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="114" id="weapon-image-114" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%82%B9%E3%82%A4%E3%83%BC%E3%83%91%E3%83%BC%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0.png?rev=6e4a6ce965c37ac84f115e1e84e4a60f&t=20230602152533');"></div>
+    <div class="weapon-count" id="weapon-count-114">0</div>
+</div>
+
+
+<div title="ガエンFF" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="115" id="weapon-image-115" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AC%E3%82%A8%E3%83%B3FF.png.webp?rev=c59ffedf75a4c75c89c11f6b80984cd3&t=20240302124703');"></div>
+    <div class="weapon-count" id="weapon-count-115">0</div>
+</div>
+
+
+<div title="スパイガジェット" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="116" id="weapon-image-116" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%91%E3%82%A4%E3%82%AC%E3%82%B8%E3%82%A7%E3%83%83%E3%83%88.png?rev=e566b90aee9cfdf1a15f1a70bfadc5ac&t=20220906104548');"></div>
+    <div class="weapon-count" id="weapon-count-116">0</div>
+</div>
+
+
+<div title="スパイガジェットソレーラ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="117" id="weapon-image-117" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%91%E3%82%A4%E3%82%AC%E3%82%B8%E3%82%A7%E3%83%83%E3%83%88%E3%82%BD%E3%83%AC%E3%83%BC%E3%83%A9.png?rev=c2a901a55e765106781de854102e1388&t=20231201184120');"></div>
+    <div class="weapon-count" id="weapon-count-117">0</div>
+</div>
+
+
+<div title="キャンピングシェルター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="118" id="weapon-image-118" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%94%E3%83%B3%E3%82%B0%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%BF%E3%83%BC.png?rev=829b5f70eaabdff2b130d24dc4927151&t=20220906104534');"></div>
+    <div class="weapon-count" id="weapon-count-118">0</div>
+</div>
+
+
+<div title="キャンピングシェルターソレーラ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="119" id="weapon-image-119" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%94%E3%83%B3%E3%82%B0%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%BF%E3%83%BC%E3%82%BD%E3%83%AC%E3%83%BC%E3%83%A9.png?rev=420b9005cf45acffc046ffc1ecc15a1e&t=20230602152654');"></div>
+    <div class="weapon-count" id="weapon-count-119">0</div>
+</div>
+
+
+<div title="パラシェルター" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="120" id="weapon-image-120" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%91%E3%83%A9%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%BF%E3%83%BC.png?rev=b37a3174dd7867802d15de24c5bb0f3a&t=20220906104623');"></div>
+    <div class="weapon-count" id="weapon-count-120">0</div>
+</div>
+
+
+<div title="パラシェルターソレーラ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="121" id="weapon-image-121" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%91%E3%83%A9%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%BF%E3%83%BC%E3%82%BD%E3%83%AC%E3%83%BC%E3%83%A9.png?rev=6cee3df4c571b30a5b147e193bfafcc2&t=20230902112548');"></div>
+    <div class="weapon-count" id="weapon-count-121">0</div>
+</div>
+
+
+<div title="オーダーパラシェルター レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="122" id="weapon-image-122" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%BF%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=331cc0af373b789bad720bd5502b5fb8&t=20240225185906');"></div>
+    <div class="weapon-count" id="weapon-count-122">0</div>
+</div>
+
+
+<div title="24式張替傘・甲" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="123" id="weapon-image-123" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/24%E5%BC%8F%E5%BC%B5%E6%9B%BF%E5%82%98%E3%83%BB%E7%94%B2.png?rev=90601185def0aa32e513a2fd8fac9f37&t=20240302124644');"></div>
+    <div class="weapon-count" id="weapon-count-123">0</div>
+</div>
+
+
+<div title="トライストリンガー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="124" id="weapon-image-124" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%88%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%88%E3%83%AA%E3%83%B3%E3%82%AC%E3%83%BC.png?rev=e6f62e9de49038a72766380f8cfd0a36&t=20220906104558');"></div>
+    <div class="weapon-count" id="weapon-count-124">0</div>
+</div>
+
+
+<div title="トライストリンガーコラボ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="125" id="weapon-image-125" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%88%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%88%E3%83%AA%E3%83%B3%E3%82%AC%E3%83%BC%E3%82%B3%E3%83%A9%E3%83%9C.png?rev=6390ff8e85c7a084347f2af88d95dfe3&t=20230902112556');"></div>
+    <div class="weapon-count" id="weapon-count-125">0</div>
+</div>
+
+
+<div title="オーダーストリンガー レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="126" id="weapon-image-126" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%82%B9%E3%83%88%E3%83%AA%E3%83%B3%E3%82%AC%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=6b845b0e84823cef7274a07caa1d3249&t=20240225185914');"></div>
+    <div class="weapon-count" id="weapon-count-126">0</div>
+</div>
+
+
+<div title="LACT-450" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="127" id="weapon-image-127" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/LACT-450.png?rev=2e2470dd345a460e841dd8578cb349d3&t=20221004145801');"></div>
+    <div class="weapon-count" id="weapon-count-127">0</div>
+</div>
+
+
+<div title="LACT-450デコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="128" id="weapon-image-128" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/LACT-450%E3%83%87%E3%82%B3.png?rev=d537d21267edc90e118771f0fc6a514d&t=20231201184102');"></div>
+    <div class="weapon-count" id="weapon-count-128">0</div>
+</div>
+
+
+<div title="ドライブワイパー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="129" id="weapon-image-129" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%89%E3%83%A9%E3%82%A4%E3%83%96%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC.png?rev=b6018aed936af11ce2336c8c55f7d7d8&t=20220906104603');"></div>
+    <div class="weapon-count" id="weapon-count-129">0</div>
+</div>
+
+
+<div title="ドライブワイパーデコ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="130" id="weapon-image-130" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%89%E3%83%A9%E3%82%A4%E3%83%96%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%E3%83%87%E3%82%B3.png?rev=b1d7a75071c67445d7c61f07847117a7&t=20230602152646');"></div>
+    <div class="weapon-count" id="weapon-count-130">0</div>
+</div>
+
+
+<div title="ジムワイパー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="131" id="weapon-image-131" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B8%E3%83%A0%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC.png?rev=25412cd375d23230ee114f8c91a98af1&t=20220906104541');"></div>
+    <div class="weapon-count" id="weapon-count-131">0</div>
+</div>
+
+
+<div title="ジムワイパー・ヒュー" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="132" id="weapon-image-132" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B8%E3%83%A0%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%E3%83%BB%E3%83%92%E3%83%A5%E3%83%BC.png?rev=88c8a5e5211656a9a4d579750f94cf6f&t=20231201184058');"></div>
+    <div class="weapon-count" id="weapon-count-132">0</div>
+</div>
+
+
+<div title="オーダーワイパー レプリカ" class="weapon-container ungained">
+    <div class="weapon-image" weapon-id="133" id="weapon-image-133" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=9f2fbc4cad104b72683c7598facd758c&t=20240225185949');"></div>
+    <div class="weapon-count" id="weapon-count-133">0</div>
+</div>
+    </div>
+</div>
+
+<script>
+    // カウントを管理する変数を設定
+    let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(133).fill(0);
+    let isIncreaseMode = true; // 初期モードは増加モード
+
+    // カウントの合計を計算して表示する関数
+    function updateTotalCount() {
+        const totalCount = counts.reduce((sum, count) => sum + count, 0);
+        document.getElementById('total-count').innerText = '合計: ' + totalCount;
+    }
+
+    // カウントが0の画像の数を計算して表示する関数
+    function updateZeroCount() {
+        const zeroCount = counts.filter(count => count === 0).length;
+        document.getElementById('zero-count').innerText = '残り武器数: ' + zeroCount;
+    }
+
+    // ページがロードされたときにカウントを表示する
+    document.addEventListener('DOMContentLoaded', (event) => {
+        for (let i = 0; i < counts.length; i++) {
+            if (document.getElementById('weapon-count-' + i)) {
+                document.getElementById('weapon-count-' + i).innerText = counts[i];
+            }
+        }
+        updateTotalCount();
+        updateZeroCount();
+    });
+
+    // カウントを更新する関数
+    function updateCount(weaponId) {
+        if (isIncreaseMode) {
+            counts[weaponId]++;
+        } else {
+            if (counts[weaponId] > 0) {
+                counts[weaponId]--;
+            }
+        }
+        document.getElementById('weapon-count-' + weaponId).innerText = counts[weaponId];
+        localStorage.setItem('weaponCounts', JSON.stringify(counts));
+        updateTotalCount();
+        updateZeroCount();
+    }
+
+    // クリック時の処理を追加
+    for (let i = 0; i < counts.length; i++) {
+        let weaponId = i;
+        if (document.getElementById('weapon-image-' + weaponId)) {
+            document.getElementById('weapon-image-' + weaponId).addEventListener('click', function() {
+                updateCount(weaponId);
+            });
+        }
+    }
+
+    // リセットボタンのクリック処理を追加
+    document.getElementById('reset-button').addEventListener('click', function() {
+        counts = Array(133).fill(0);
+        localStorage.setItem('weaponCounts', JSON.stringify(counts));
+        for (let i = 0; i < counts.length; i++) {
+            if (document.getElementById('weapon-count-' + i)) {
+                document.getElementById('weapon-count-' + i).innerText = counts[i];
+            }
+        }
+        updateTotalCount();
+        updateZeroCount();
+    });
+
+    // モード切替ボタンのクリック処理を追加
+    document.getElementById('toggle-button').addEventListener('click', function() {
+        isIncreaseMode = !isIncreaseMode;
+        document.getElementById('toggle-button').innerText = isIncreaseMode ? '増加' : '減少';
+    });
+</script>
+
+</body>
+</html>

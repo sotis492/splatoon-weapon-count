@@ -849,7 +849,7 @@
 
 <script>
     // カウントを管理する変数を設定
-    let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(133).fill(0);
+    let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(134).fill(0);
     let isIncreaseMode = true; // 初期モードは増加モード
 
     // カウントの合計を計算して表示する関数
@@ -902,7 +902,7 @@
 
     // リセットボタンのクリック処理を追加
     document.getElementById('reset-button').addEventListener('click', function() {
-        counts = Array(133).fill(0);
+        counts = Array(134).fill(0);
         localStorage.setItem('weaponCounts', JSON.stringify(counts));
         for (let i = 0; i < counts.length; i++) {
             if (document.getElementById('weapon-count-' + i)) {

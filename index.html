@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weapopn Counter</title>
+    <title>Image Counter</title>
     <style>
         .container {
             text-align: center;
@@ -47,7 +47,7 @@
     <button class="reset-button" id="reset-button">リセット</button>
     <button class="toggle-button" id="toggle-button">増加</button>
     <div id="weapon-container" class="weapon-grid">
-       <div title="スプラシューター" class="weapon-container ungained">
+        <div title="スプラシューター" class="weapon-container ungained">
     <div class="weapon-image" weapon-id="1" id="weapon-image-1" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=4d70126a9b68e76b463e182d3d42218d&t=20220905214644');"></div>
     <div class="weapon-count" id="weapon-count-1">0</div>
 </div>
@@ -841,15 +841,15 @@
 
 
 <div title="オーダーワイパー レプリカ" class="weapon-container ungained">
-    <div class="weapon-image" weapon-id="133" id="weapon-image-133" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=9f2fbc4cad104b72683c7598facd758c&t=20240225185949');"></div>
-    <div class="weapon-count" id="weapon-count-133">0</div>
+    <div class="weapon-image" weapon-id="0" id="weapon-image-0" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%AA%E3%83%BC%E3%83%80%E3%83%BC%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%20%E3%83%AC%E3%83%97%E3%83%AA%E3%82%AB.png?rev=9f2fbc4cad104b72683c7598facd758c&t=20240225185949');"></div>
+    <div class="weapon-count" id="weapon-count-0">0</div>
 </div>
     </div>
 </div>
 
 <script>
     // カウントを管理する変数を設定
-    let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(134).fill(0);
+    let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(133).fill(0);
     let isIncreaseMode = true; // 初期モードは増加モード
 
     // カウントの合計を計算して表示する関数
@@ -902,7 +902,7 @@
 
     // リセットボタンのクリック処理を追加
     document.getElementById('reset-button').addEventListener('click', function() {
-        counts = Array(134).fill(0);
+        counts = Array(133).fill(0);
         localStorage.setItem('weaponCounts', JSON.stringify(counts));
         for (let i = 0; i < counts.length; i++) {
             if (document.getElementById('weapon-count-' + i)) {

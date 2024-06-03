@@ -30,7 +30,7 @@
             font-size: 12px;
             margin-top: 5px;
         }
-        .reset-button, .toggle-button {
+        .reset-button, .toggle-button, .recalculate-button {
             display: block;
             margin: 10px auto;
             padding: 10px 20px;
@@ -46,8 +46,9 @@
     <div id="zero-count" style="font-size: 18px; margin-bottom: 10px;">残り武器数: 0</div>
     <button class="reset-button" id="reset-button">リセット</button>
     <button class="toggle-button" id="toggle-button">増加</button>
+    <button class="recalculate-button" id="recalculate-button">再計算</button>
     <div id="weapon-container" class="weapon-grid">
-        <div title="スプラシューター" class="weapon-container ungained">
+         <div title="スプラシューター" class="weapon-container ungained">
     <div class="weapon-image" weapon-id="1" id="weapon-image-1" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=4d70126a9b68e76b463e182d3d42218d&t=20220905214644');"></div>
     <div class="weapon-count" id="weapon-count-1">0</div>
 </div>
@@ -911,9 +912,9 @@
     <div class="weapon-image" weapon-id="142" id="weapon-image-142" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%87%E3%83%B3%E3%82%BF%E3%83%AB%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%E3%82%B9%E3%83%9F.png.webp?rev=44c8bc4781ac55372df61f2e6bbd361a&t=20240603134342');"></div>
     <div class="weapon-count" id="weapon-count-142">0</div>
 </div>
+
+    </div>
 </div>
-
-
 
 <script>
    // カウントを管理する変数を設定
@@ -985,6 +986,11 @@ document.getElementById('reset-button').addEventListener('click', function() {
 document.getElementById('toggle-button').addEventListener('click', function() {
     isIncreaseMode = !isIncreaseMode;
     document.getElementById('toggle-button').innerText = isIncreaseMode ? '増加' : '減少';
+});
+
+// 再計算ボタンのクリック処理を追加
+document.getElementById('recalculate-button').addEventListener('click', function() {
+    updateZeroCount();
 });
 
 </script>

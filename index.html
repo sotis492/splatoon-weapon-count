@@ -46,8 +46,6 @@
     <div id="zero-count" style="font-size: 18px; margin-bottom: 10px;">残り武器数: 0</div>
     <button class="reset-button" id="reset-button">リセット</button>
     <button class="toggle-button" id="toggle-button">増加</button>
-    <button class="recalculate-button" id="recalculate-button">再計算</button>
-    <button class="set-zero-button" id="set-zero-button">残り武器数を0にする</button>
     <div id="weapon-container" class="weapon-grid">
          <div title="スプラシューター" class="weapon-container ungained">
     <div class="weapon-image" weapon-id="1" id="weapon-image-1" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=4d70126a9b68e76b463e182d3d42218d&t=20220905214644');"></div>
@@ -918,8 +916,16 @@
 </div>
 
 <script>
-   // カウントを管理する変数を設定
-let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(143).fill(0);
+   // 武器の数をここで定義
+const weaponCount = 143; // 武器の総数を新しい数に更新
+let storedCounts = JSON.parse(localStorage.getItem('weaponCounts')) || [];
+let counts = Array(weaponCount).fill(0);
+
+// 既存のカウントを保持しつつ、新しい武器分のカウントを追加
+for (let i = 0; i < storedCounts.length; i++) {
+    counts[i] = storedCounts[i];
+}
+
 let isIncreaseMode = true; // 初期モードは増加モード
 
 // カウントの合計を計算して表示する関数
@@ -972,7 +978,7 @@ for (let i = 0; i < counts.length; i++) {
 
 // リセットボタンのクリック処理を追加
 document.getElementById('reset-button').addEventListener('click', function() {
-    counts = Array(143).fill(0);
+    counts = Array(weaponCount).fill(0);
     localStorage.setItem('weaponCounts', JSON.stringify(counts));
     for (let i = 0; i < counts.length; i++) {
         if (document.getElementById('weapon-count-' + i)) {
@@ -987,16 +993,6 @@ document.getElementById('reset-button').addEventListener('click', function() {
 document.getElementById('toggle-button').addEventListener('click', function() {
     isIncreaseMode = !isIncreaseMode;
     document.getElementById('toggle-button').innerText = isIncreaseMode ? '増加' : '減少';
-});
-
-// 再計算ボタンのクリック処理を追加
-document.getElementById('recalculate-button').addEventListener('click', function() {
-    updateZeroCount();
-});
-
-// 残り武器数の表示を0にするボタンのクリック処理を追加
-document.getElementById('set-zero-button').addEventListener('click', function() {
-    document.getElementById('zero-count').innerText = '残り武器数: 0';
 });
 
 </script>

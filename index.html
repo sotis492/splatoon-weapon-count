@@ -4,7 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Counter</title>
-  
+    <style>
+      .container {
+    text-align: center;
+}
+
+.weapon-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 1行に6つの画像を並べる */
+    gap: 10px;
+    justify-items: center;
+}
+
+.weapon-container {
+    margin: 10px 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.weapon-image {
+    width: 30px; /* 固定幅 */
+    height: 30px; /* 固定高さ */
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+
+.weapon-count {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.reset-button, .toggle-button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+    </style>
 </head>
 <body>
 
@@ -866,7 +904,6 @@
     <div class="weapon-count" id="weapon-count-0">0</div>
 </div>
     </div>
-</div>
 
 
 <div title="デンタルワイパーミント" class="weapon-container ungained">
@@ -880,15 +917,6 @@
     <div class="weapon-image" weapon-id="142" id="weapon-image-142" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%87%E3%83%B3%E3%82%BF%E3%83%AB%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%E3%82%B9%E3%83%9F.png.webp?rev=44c8bc4781ac55372df61f2e6bbd361a&t=20240603134342');"></div>
     <div class="weapon-count" id="weapon-count-142">0</div>
 </div>
-
-<div title="デンタルワイパースミ" class="weapon-container ungained">
-    <div class="weapon-image" weapon-id="143" id="weapon-image-143" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%87%E3%83%B3%E3%82%BF%E3%83%AB%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%E3%82%B9%E3%83%9F.png.webp?rev=44c8bc4781ac55372df61f2e6bbd361a&t=20240603134342');"></div>
-    <div class="weapon-count" id="weapon-count-143">0</div>
-</div>
-
-<div title="デンタルワイパースミ" class="weapon-container ungained">
-    <div class="weapon-image" weapon-id="143" id="weapon-image-144" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%87%E3%83%B3%E3%82%BF%E3%83%AB%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%E3%82%B9%E3%83%9F.png.webp?rev=44c8bc4781ac55372df61f2e6bbd361a&t=20240603134342');"></div>
-    <div class="weapon-count" id="weapon-count-143">0</div>
 </div>
 
 

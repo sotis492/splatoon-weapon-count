@@ -917,76 +917,77 @@
 
 
 <script>
-    // カウントを管理する変数を設定
-    let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(143).fill(0);
-    let isIncreaseMode = true; // 初期モードは増加モード
+   // カウントを管理する変数を設定
+let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(143).fill(0);
+let isIncreaseMode = true; // 初期モードは増加モード
 
-    // カウントの合計を計算して表示する関数
-    function updateTotalCount() {
-        const totalCount = counts.reduce((sum, count) => sum + count, 0);
-        document.getElementById('total-count').innerText = '合計: ' + totalCount;
-    }
+// カウントの合計を計算して表示する関数
+function updateTotalCount() {
+    const totalCount = counts.reduce((sum, count) => sum + count, 0);
+    document.getElementById('total-count').innerText = '合計: ' + totalCount;
+}
 
-    // カウントが0の画像の数を計算して表示する関数
-    function updateZeroCount() {
-        const zeroCount = counts.filter(count => count === 0).length;
-        document.getElementById('zero-count').innerText = '残り武器数: ' + zeroCount;
-    }
+// カウントが0の画像の数を計算して表示する関数
+function updateZeroCount() {
+    const zeroCount = counts.filter(count => count === 0).length;
+    document.getElementById('zero-count').innerText = '残り武器数: ' + zeroCount;
+}
 
-    // ページがロードされたときにカウントを表示する
-    document.addEventListener('DOMContentLoaded', (event) => {
-        for (let i = 0; i < counts.length; i++) {
-            if (document.getElementById('weapon-count-' + i)) {
-                document.getElementById('weapon-count-' + i).innerText = counts[i];
-            }
-        }
-        updateTotalCount();
-        updateZeroCount();
-    });
-
-    // カウントを更新する関数
-    function updateCount(weaponId) {
-        if (isIncreaseMode) {
-            counts[weaponId]++;
-        } else {
-            if (counts[weaponId] > 0) {
-                counts[weaponId]--;
-            }
-        }
-        document.getElementById('weapon-count-' + weaponId).innerText = counts[weaponId];
-        localStorage.setItem('weaponCounts', JSON.stringify(counts));
-        updateTotalCount();
-        updateZeroCount();
-    }
-
-    // クリック時の処理を追加
+// ページがロードされたときにカウントを表示する
+document.addEventListener('DOMContentLoaded', (event) => {
     for (let i = 0; i < counts.length; i++) {
-        let weaponId = i;
-        if (document.getElementById('weapon-image-' + weaponId)) {
-            document.getElementById('weapon-image-' + weaponId).addEventListener('click', function() {
-                updateCount(weaponId);
-            });
+        if (document.getElementById('weapon-count-' + i)) {
+            document.getElementById('weapon-count-' + i).innerText = counts[i];
         }
     }
+    updateTotalCount();
+    updateZeroCount();
+});
 
-    // リセットボタンのクリック処理を追加
-    document.getElementById('reset-button').addEventListener('click', function() {
-        counts = Array(143).fill(0);
-        localStorage.setItem('weaponCounts', JSON.stringify(counts));
-        for (let i = 0; i < counts.length; i++) {
-            if (document.getElementById('weapon-count-' + i)) {
-                document.getElementById('weapon-count-' + i).innerText = counts[i];
-            }
+// カウントを更新する関数
+function updateCount(weaponId) {
+    if (isIncreaseMode) {
+        counts[weaponId]++;
+    } else {
+        if (counts[weaponId] > 0) {
+            counts[weaponId]--;
         }
-        updateTotalCount();
-        updateZeroCount();
-    });
+    }
+    document.getElementById('weapon-count-' + weaponId).innerText = counts[weaponId];
+    localStorage.setItem('weaponCounts', JSON.stringify(counts));
+    updateTotalCount();
+    updateZeroCount();
+}
 
-    // モード切替ボタンのクリック処理を追加
-    document.getElementById('toggle-button').addEventListener('click', function() {
-        isIncreaseMode = !isIncreaseMode;
-        document.getElementById('toggle-button').innerText = isIncreaseMode ? '増加' : '減少';
-    });
+// クリック時の処理を追加
+for (let i = 0; i < counts.length; i++) {
+    let weaponId = i;
+    if (document.getElementById('weapon-image-' + weaponId)) {
+        document.getElementById('weapon-image-' + weaponId).addEventListener('click', function() {
+            updateCount(weaponId);
+        });
+    }
+}
+
+// リセットボタンのクリック処理を追加
+document.getElementById('reset-button').addEventListener('click', function() {
+    counts = Array(143).fill(0);
+    localStorage.setItem('weaponCounts', JSON.stringify(counts));
+    for (let i = 0; i < counts.length; i++) {
+        if (document.getElementById('weapon-count-' + i)) {
+            document.getElementById('weapon-count-' + i).innerText = counts[i];
+        }
+    }
+    updateTotalCount();
+    updateZeroCount();
+});
+
+// モード切替ボタンのクリック処理を追加
+document.getElementById('toggle-button').addEventListener('click', function() {
+    isIncreaseMode = !isIncreaseMode;
+    document.getElementById('toggle-button').innerText = isIncreaseMode ? '増加' : '減少';
+});
+
 </script>
 
 </body>

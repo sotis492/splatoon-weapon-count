@@ -8,34 +8,45 @@
         .container {
             text-align: center;
         }
+
         .weapon-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(6, 1fr); /* 1行に6つの画像を並べる */
             gap: 10px;
             justify-items: center;
         }
+
         .weapon-container {
+            width: 50px; /* 固定幅 */
             margin: 10px 5px;
             padding: 5px;
             border-radius: 5px;
+            box-sizing: border-box; /* ボックスのサイズを確実に固定 */
         }
+
         .weapon-image {
-            width: 30px;
-            height: 30px;
+            width: 30px; /* 固定幅 */
+            height: 30px; /* 固定高さ */
             background-size: cover;
             background-position: center;
             cursor: pointer;
         }
+
         .weapon-count {
             font-size: 12px;
             margin-top: 5px;
         }
-        .reset-button, .toggle-button {
+
+        .reset-button, .toggle-button, .import-button, .export-button {
             display: block;
             margin: 10px auto;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+        }
+
+        #file-input {
+            display: none;
         }
     </style>
 </head>
@@ -46,8 +57,12 @@
     <div id="zero-count" style="font-size: 18px; margin-bottom: 10px;">残り武器数: 0</div>
     <button class="reset-button" id="reset-button">リセット</button>
     <button class="toggle-button" id="toggle-button">増加</button>
+    <button class="export-button" id="export-button">エクスポート</button>
+    <button class="import-button" id="import-button">インポート</button>
+    <input type="file" id="file-input">
     <div id="weapon-container" class="weapon-grid">
-        <div title="スプラシューター" class="weapon-container ungained">
+        <!-- 武器コンテナの例 -->
+         <div title="スプラシューター" class="weapon-container ungained">
     <div class="weapon-image" weapon-id="1" id="weapon-image-1" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=4d70126a9b68e76b463e182d3d42218d&t=20220905214644');"></div>
     <div class="weapon-count" id="weapon-count-1">0</div>
 </div>
@@ -911,82 +926,119 @@
     <div class="weapon-image" weapon-id="142" id="weapon-image-142" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%83%87%E3%83%B3%E3%82%BF%E3%83%AB%E3%83%AF%E3%82%A4%E3%83%91%E3%83%BC%E3%82%B9%E3%83%9F.png.webp?rev=44c8bc4781ac55372df61f2e6bbd361a&t=20240603134342');"></div>
     <div class="weapon-count" id="weapon-count-142">0</div>
 </div>
+    </div>
 </div>
 
-
-
 <script>
-   // カウントを管理する変数を設定
-let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(143).fill(0);
-let isIncreaseMode = true; // 初期モードは増加モード
+    // カウントを管理する変数を設定
+    let counts = JSON.parse(localStorage.getItem('weaponCounts')) || Array(143).fill(0);
+    let isIncreaseMode = true; // 初期モードは増加モード
 
-// カウントの合計を計算して表示する関数
-function updateTotalCount() {
-    const totalCount = counts.reduce((sum, count) => sum + count, 0);
-    document.getElementById('total-count').innerText = '合計: ' + totalCount;
-}
+    // カウントの合計を計算して表示する関数
+    function updateTotalCount() {
+        const totalCount = counts.reduce((sum, count) => sum + count, 0);
+        document.getElementById('total-count').innerText = '合計: ' + totalCount;
+    }
 
-// カウントが0の画像の数を計算して表示する関数
-function updateZeroCount() {
-    const zeroCount = counts.filter(count => count === 0).length;
-    document.getElementById('zero-count').innerText = '残り武器数: ' + zeroCount;
-}
+    // カウントが0の画像の数を計算して表示する関数
+    function updateZeroCount() {
+        const zeroCount = counts.filter(count => count === 0).length;
+        document.getElementById('zero-count').innerText = '残り武器数: ' + zeroCount;
+    }
 
-// ページがロードされたときにカウントを表示する
-document.addEventListener('DOMContentLoaded', (event) => {
+    // ページがロードされたときにカウントを表示する
+    document.addEventListener('DOMContentLoaded', (event) => {
+        for (let i = 0; i < counts.length; i++) {
+            if (document.getElementById('weapon-count-' + i)) {
+                document.getElementById('weapon-count-' + i).innerText = counts[i];
+            }
+        }
+        updateTotalCount();
+        updateZeroCount();
+    });
+
+    // カウントを更新する関数
+    function updateCount(weaponId) {
+        if (isIncreaseMode) {
+            counts[weaponId]++;
+        } else {
+            if (counts[weaponId] > 0) {
+                counts[weaponId]--;
+            }
+        }
+        document.getElementById('weapon-count-' + weaponId).innerText = counts[weaponId];
+        localStorage.setItem('weaponCounts', JSON.stringify(counts));
+        updateTotalCount();
+        updateZeroCount();
+    }
+
+    // クリック時の処理を追加
     for (let i = 0; i < counts.length; i++) {
-        if (document.getElementById('weapon-count-' + i)) {
-            document.getElementById('weapon-count-' + i).innerText = counts[i];
+        let weaponId = i;
+        if (document.getElementById('weapon-image-' + weaponId)) {
+            document.getElementById('weapon-image-' + weaponId).addEventListener('click', function() {
+                updateCount(weaponId);
+            });
         }
     }
-    updateTotalCount();
-    updateZeroCount();
-});
 
-// カウントを更新する関数
-function updateCount(weaponId) {
-    if (isIncreaseMode) {
-        counts[weaponId]++;
-    } else {
-        if (counts[weaponId] > 0) {
-            counts[weaponId]--;
+    // リセットボタンのクリック処理を追加
+    document.getElementById('reset-button').addEventListener('click', function() {
+        counts = Array(143).fill(0);
+        localStorage.setItem('weaponCounts', JSON.stringify(counts));
+        for (let i = 0; i < counts.length; i++) {
+            if (document.getElementById('weapon-count-' + i)) {
+                document.getElementById('weapon-count-' + i).innerText = counts[i];
+            }
         }
-    }
-    document.getElementById('weapon-count-' + weaponId).innerText = counts[weaponId];
-    localStorage.setItem('weaponCounts', JSON.stringify(counts));
-    updateTotalCount();
-    updateZeroCount();
-}
+        updateTotalCount();
+        updateZeroCount();
+    });
 
-// クリック時の処理を追加
-for (let i = 0; i < counts.length; i++) {
-    let weaponId = i;
-    if (document.getElementById('weapon-image-' + weaponId)) {
-        document.getElementById('weapon-image-' + weaponId).addEventListener('click', function() {
-            updateCount(weaponId);
-        });
-    }
-}
+    // モード切替ボタンのクリック処理を追加
+    document.getElementById('toggle-button').addEventListener('click', function() {
+        isIncreaseMode = !isIncreaseMode;
+        document.getElementById('toggle-button').innerText = isIncreaseMode ? '増加' : '減少';
+    });
 
-// リセットボタンのクリック処理を追加
-document.getElementById('reset-button').addEventListener('click', function() {
-    counts = Array(143).fill(0);
-    localStorage.setItem('weaponCounts', JSON.stringify(counts));
-    for (let i = 0; i < counts.length; i++) {
-        if (document.getElementById('weapon-count-' + i)) {
-            document.getElementById('weapon-count-' + i).innerText = counts[i];
-        }
-    }
-    updateTotalCount();
-    updateZeroCount();
-});
+    // エクスポートボタンのクリック処理を追加
+    document.getElementById('export-button').addEventListener('click', function() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(counts));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "weapon_counts.json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    });
 
-// モード切替ボタンのクリック処理を追加
-document.getElementById('toggle-button').addEventListener('click', function() {
-    isIncreaseMode = !isIncreaseMode;
-    document.getElementById('toggle-button').innerText = isIncreaseMode ? '増加' : '減少';
-});
+    // インポートボタンのクリック処理を追加
+    document.getElementById('import-button').addEventListener('click', function() {
+        document.getElementById('file-input').click();
+    });
 
+    // ファイル選択時の処理を追加
+    document.getElementById('file-input').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const importedCounts = JSON.parse(e.target.result);
+            if (Array.isArray(importedCounts) && importedCounts.length === counts.length) {
+                counts = importedCounts;
+                localStorage.setItem('weaponCounts', JSON.stringify(counts));
+                for (let i = 0; i < counts.length; i++) {
+                    if (document.getElementById('weapon-count-' + i)) {
+                        document.getElementById('weapon-count-' + i).innerText = counts[i];
+                    }
+                }
+                updateTotalCount();
+                updateZeroCount();
+            } else {
+                alert("インポートしたファイルの形式が正しくありません。");
+            }
+        };
+        reader.readAsText(file);
+    });
 </script>
 
 </body>

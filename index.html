@@ -30,7 +30,7 @@
             font-size: 12px;
             margin-top: 5px;
         }
-        .reset-button, .toggle-button, .recalculate-button {
+        .reset-button, .toggle-button, .recalculate-button, .set-zero-button {
             display: block;
             margin: 10px auto;
             padding: 10px 20px;
@@ -47,6 +47,7 @@
     <button class="reset-button" id="reset-button">リセット</button>
     <button class="toggle-button" id="toggle-button">増加</button>
     <button class="recalculate-button" id="recalculate-button">再計算</button>
+    <button class="set-zero-button" id="set-zero-button">残り武器数を0にする</button>
     <div id="weapon-container" class="weapon-grid">
          <div title="スプラシューター" class="weapon-container ungained">
     <div class="weapon-image" weapon-id="1" id="weapon-image-1" style="background-image: url('https://cdn.wikiwiki.jp/to/w/splatoon3mix/icon/::ref/%E3%82%B9%E3%83%97%E3%83%A9%E3%82%B7%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%BC.png?rev=4d70126a9b68e76b463e182d3d42218d&t=20220905214644');"></div>
@@ -991,6 +992,11 @@ document.getElementById('toggle-button').addEventListener('click', function() {
 // 再計算ボタンのクリック処理を追加
 document.getElementById('recalculate-button').addEventListener('click', function() {
     updateZeroCount();
+});
+
+// 残り武器数の表示を0にするボタンのクリック処理を追加
+document.getElementById('set-zero-button').addEventListener('click', function() {
+    document.getElementById('zero-count').innerText = '残り武器数: 0';
 });
 
 </script>
